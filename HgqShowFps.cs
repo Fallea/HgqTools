@@ -17,7 +17,6 @@ public class HgqShowFps : MonoBehaviour
     void Awake()
     {
         GameObject.DontDestroyOnLoad(this.gameObject);
-        //Application.targetFrameRate = 50;
     }
 
     void Update()

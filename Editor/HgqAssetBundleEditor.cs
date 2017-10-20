@@ -39,6 +39,11 @@ public class HgqAssetBundleEditor : MonoBehaviour
         abb.assetNames = new string[] { path };
         abb.assetBundleVariant = "";
         list.Add(abb);
+        if (list.Count > 0)
+        {
+            BuildPipeline.BuildAssetBundles(bundleDirPath, list.ToArray(), BuildAssetBundleOptions.None | BuildAssetBundleOptions.ForceRebuildAssetBundle, EditorUserBuildSettings.activeBuildTarget);
+            AssetDatabase.Refresh();
+        }
     }
 
     [MenuItem("Hgq/AssetBundle/Bulid one bundle by all selected")]

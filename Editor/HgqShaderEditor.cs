@@ -44,8 +44,8 @@ public class HgqShaderEditor : MonoBehaviour
         Debug.Log(count);
     }
 
-    [MenuItem("Hgq/Shader/Replace Standard")]
-    static void ReplaceStandard()
+    [MenuItem("Hgq/Shader/Standard to Tile")]
+    static void StandardToTile()
     {
         Object[] objs = Selection.objects;
         List<MeshRenderer> meshRenderers = new List<MeshRenderer>();
@@ -66,7 +66,7 @@ public class HgqShaderEditor : MonoBehaviour
 
         Shader tileShader = Shader.Find("Unlit/ShaderTile");
         Shader tileCutoffShader = Shader.Find("Unlit/ShaderTileCutoff");
-        Shader standardShader = Shader.Find("Standard");
+
 
         Material tileMaterial = AssetDatabase.LoadAssetAtPath<Material>("Assets/Resources/DefaultMat_Tile.mat");
         Material tileCutoffMaterial = AssetDatabase.LoadAssetAtPath<Material>("Assets/Resources/DefaultMat_TileCutoff.mat");
@@ -87,10 +87,21 @@ public class HgqShaderEditor : MonoBehaviour
                 if (filePath.EndsWith("_new.mat"))
                 {
                     newMaterials[j] = material;
+                    if (material.shader.name.Equals("Standard"))
+                    {
+                        float mode = material.GetFloat("_Mode");
+                        if (mode == 3)
+                        {
+                            material.shader = tileCutoffShader;
+                        }
+                        else
+                        {
+                            material.shader = tileShader;
+                        }
+                    }
+
                     continue;
                 }
-
-                Debug.Log(filePath);
 
                 filePath = filePath.Replace(material.name + ".mat", material.name + "_new.mat");
 
@@ -119,9 +130,6 @@ public class HgqShaderEditor : MonoBehaviour
                     }
 
                     newMaterials[j] = newMaterial;
-
-                    //Debug.Log(mode);
-                    //material.shader = standardShader;
                 }
                 else
                 {
@@ -131,6 +139,7 @@ public class HgqShaderEditor : MonoBehaviour
 
             meshRenderer.sharedMaterials = newMaterials;
         }
+        Debug.Log("Standard to Tile Completed.");
     }
 
     [MenuItem("Hgq/Shader/Replace with Standard")]
